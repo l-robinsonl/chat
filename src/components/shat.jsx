@@ -33,12 +33,6 @@ const ChatComponent = () => {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
-  // effect to log all messages and private chats on change
-  useEffect(() => {
-    console.log("Messages:", messages);
-    console.log("Private Chats:", privateChats);
-  }, [messages, privateChats]);
-
   useEffect(() => {
     scrollToBottom();
   }, [messages, privateChats, activeChat]);
@@ -113,13 +107,13 @@ const ChatComponent = () => {
     const handleUserJoined = (user) => {
       setOnlineUsers(prev => [...prev.filter(u => u.userId !== user.userId), {
         userId: user.userId,
-        displayName: user.displayName || user.userName
+        displayName: user.displayName
       }]);
 
       const systemMessage = {
         id: Date.now() + Math.random(),
         type: 'system',
-        content: `${user.displayName || user.userName} joined the chat`,
+        content: `${user.displayName} joined the chat`,
         sender: 'System',
         senderName: 'System',
         timestamp: new Date(),
@@ -135,7 +129,7 @@ const ChatComponent = () => {
       const systemMessage = {
         id: Date.now() + Math.random(),
         type: 'system',
-        content: `${user.userName} left the chat`,
+        content: `${user.displayName} left the chat`,
         sender: 'System',
         senderName: 'System',
         timestamp: new Date(),
@@ -446,7 +440,7 @@ const ChatComponent = () => {
               {connectionStatus === 'connecting' ? 'Connecting...' : 'Join Chat'}
             </button>
 
-            {connectionStatus === 'auth_failed' && (
+            {connectionStatus === 'authFailed' && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-red-700 text-sm">
                 Failed to connect. Please check your connection and try again.
               </div>
